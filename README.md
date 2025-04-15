@@ -14,7 +14,7 @@ Cada sección muestra una tabla con datos obtenidos desde la API de Totalum, con
 
 ## 🛠 Tecnologías utilizadas
 
-- **Angular 16+**
+- **Angular 19.2.7**
 - **SDK de Totalum**
 - **HTML + SCSS + Angular Material**
 
