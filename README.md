@@ -1,59 +1,73 @@
-# PanelTotallum
+# Panel Totalum - Prueba Técnica
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.7.
+Este proyecto es una prueba técnica desarrollada en Angular para la oferta de programadora web fullstack publicada por **Totalum**.
 
-## Development server
+Incluye un panel administrativo con tres secciones:
 
-To start a local development server, run:
+- **Productos**
+- **Pedidos**
+- **Clientes**
 
-```bash
-ng serve
-```
+Cada sección muestra una tabla con datos obtenidos desde la API de Totalum, con paginación, buscador y posibilidad de crear y eliminar elementos.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## 🛠 Tecnologías utilizadas
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- **Angular 16+**
+- **SDK de Totalum**
+- **HTML + SCSS + Angular Material**
 
-```bash
-ng generate component component-name
-```
+---
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 📁 Estructura del proyecto
 
-```bash
-ng generate --help
-```
+La lógica compartida entre los componentes se ha abstraído en:
 
-## Building
+- `BaseListadoComponent`: componente base reutilizable con lógica de listado, búsqueda, paginación, creación y eliminación.
+- `TotalumBaseService`: servicio base para centralizar operaciones CRUD con la API de Totalum.
 
-To build the project run:
+Los tres servicios (`productos`, `clientes` y `pedidos`) extienden de este servicio base.  
+Los componentes específicos (`ProductosComponent`, `PedidosComponent`, `ClientesComponent`) heredan del componente base.
 
-```bash
-ng build
-```
+---
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## ▶️ Cómo ejecutar el proyecto
 
-## Running unit tests
+1. **Clonar el repositorio**
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+2. **Instalar las dependencias**
 
-```bash
-ng test
-```
+   ```bash
+   npm install
+   ```
 
-## Running end-to-end tests
+3. **Añadir tu clave API de Totalum** en el archivo `src/environments/environment.secret.ts`:
 
-For end-to-end (e2e) testing, run:
+   ```ts
+   export const secretEnvironment = {
+     totalumApiKey: "TU_API_KEY_AQUÍ",
+   };
+   ```
 
-```bash
-ng e2e
-```
+   ⚠️ Este archivo está incluido en `.gitignore` por seguridad y **no debe subirse al repositorio**.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+4. **Ejecutar la aplicación**
 
-## Additional Resources
+   ```bash
+   ng serve
+   ```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+5. **Abrir el navegador** en [http://localhost:4200](http://localhost:4200)
+
+---
+
+## 💡 Notas
+
+- El proyecto se ha desarrollado siguiendo las indicaciones del vídeo aportado por Totalum en la oferta de empleo.
+- Se ha añadido funcionalidad adicional para la creación y eliminación de registros desde el panel, mediante formularios modales y botones con feedback visual.
+
+---
+
+Gracias por la oportunidad 🙌  
+**Clara Manzano Corona**
