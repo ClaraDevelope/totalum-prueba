@@ -26,9 +26,11 @@ mat-card-title {
 
 .custom-table thead {
   background-color: #111827;
-  color: #fff;
+  color: #ececec;
 }
-
+.custom-table th {
+  font-weight: normal;
+}
 .custom-table th,
 .custom-table td {
   padding: 0.85rem 1rem;
@@ -67,20 +69,20 @@ mat-card-title {
   padding: 0.6rem 1.2rem;
   border: none;
   border-radius: 0.25rem;
-  background-color: #1e5dc3;
+  background-color: #0e50c4;
   color: rgb(228, 225, 225);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .paginacion button:hover:not(:disabled) {
-  background-color: #17419b;
+  background-color: #0e45a3;
 }
 
 .paginacion button:disabled {
   color: #ebe6e6;
-  background-color: #949495;
+  background-color: #868687;
   cursor: not-allowed;
 }
 
@@ -150,7 +152,7 @@ a.active::after {
 }
 
 .btn-crear {
-  background-color: #10b981;
+  background-color: #b05911;
   color: #ffffff;
   border: none;
   padding: 0.5rem 1rem;
@@ -162,7 +164,7 @@ a.active::after {
 }
 
 .btn-crear:hover {
-  background-color: #059669;
+  background-color: #8b4710;
 }
 
 .cantidad-con-boton {
@@ -295,7 +297,7 @@ a.active::after {
 }
 
 .modal-actions button[type="submit"] {
-  background-color: #3b82f6;
+  background-color: #0e50c4;
   color: white;
   padding: 0.5rem 1.3rem;
   font-size: 0.95rem;
@@ -307,7 +309,7 @@ a.active::after {
 }
 
 .modal-actions button[type="submit"]:hover {
-  background-color: #2563eb;
+  background-color: rgb(30, 84, 199);
 }
 
 .modal-actions button[type="submit"]:disabled {
@@ -482,14 +484,14 @@ a.active::after {
     }
 
     &:hover {
-      color: #2563eb;
+      color: #0e45a3;
     }
 
     &.active {
-      color: #3b82f6;
+      color: #0e45a3;
 
       &::after {
-        background-color: #3b82f6;
+        background-color: #0e45a3;
       }
     }
   }
