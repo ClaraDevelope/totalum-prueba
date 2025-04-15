@@ -1,0 +1,128 @@
+<mat-card>
+  <div class="card-header">
+    <mat-card-title>Lista de productos</mat-card-title>
+    <button class="btn-crear" (click)="toggleFormulario()">
+      + Crear producto
+    </button>
+  </div>
+
+  <div
+    class="modal-backdrop"
+    *ngIf="mostrarFormulario"
+    (click)="toggleFormulario()"
+  ></div>
+
+  <div class="modal" *ngIf="mostrarFormulario" role="dialog" aria-modal="true">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h2>Nuevo producto</h2>
+      <form (ngSubmit)="crearProducto()" #form="ngForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input
+              id="nombre"
+              type="text"
+              [(ngModel)]="nuevoProducto.nombre"
+              name="nombre"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="precio">Precio</label>
+            <input
+              id="precio"
+              type="number"
+              [(ngModel)]="nuevoProducto.precio"
+              name="precio"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="categoria">Categoría</label>
+            <input
+              id="categoria"
+              type="text"
+              [(ngModel)]="nuevoProducto.categoria"
+              name="categoria"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="cantidad">Cantidad</label>
+            <input
+              id="cantidad"
+              type="number"
+              [(ngModel)]="nuevoProducto.cantidad"
+              name="cantidad"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="cancelar" (click)="toggleFormulario()">
+            Cancelar
+          </button>
+          <button type="submit" [disabled]="form.invalid">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <input
+    type="text"
+    placeholder="Buscar"
+    [(ngModel)]="busqueda"
+    (input)="filtrar()"
+    class="buscador"
+  />
+
+  <div *ngIf="loading" class="spinner">Cargando...</div>
+
+  <table class="custom-table" *ngIf="!loading && productos.length">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Categoría</th>
+        <th>Cantidad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let producto of productos">
+        <td>{{ producto.nombre }}</td>
+        <td>{{ producto.precio }} €</td>
+        <td>{{ producto.categoria }}</td>
+        <td class="cantidad-con-boton">
+          {{ producto.cantidad }}
+          <button
+            class="btn-icono"
+            aria-label="Eliminar producto"
+            title="Eliminar producto"
+            (click)="eliminarProducto(producto._id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!loading && !productos.length">No hay productos para mostrar.</p>
+
+  <div class="paginacion" *ngIf="!loading && productos.length">
+    <button (click)="anterior()" [disabled]="paginaActual === 0">
+      ← Anterior
+    </button>
+    <span>Página {{ paginaActual + 1 }}</span>
+    <button (click)="siguiente()" [disabled]="!hayMasProductos">
+      Siguiente →
+    </button>
+  </div>
+</mat-card>
+<div *ngIf="toastVisible" class="toast" [ngClass]="toastTipo">
+  {{ toastMensaje }}
+</div>

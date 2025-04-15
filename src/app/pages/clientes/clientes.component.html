@@ -1,0 +1,127 @@
+<mat-card>
+  <div class="card-header">
+    <mat-card-title>Lista de clientes</mat-card-title>
+    <button class="btn-crear" (click)="toggleFormulario()">
+      + Crear cliente
+    </button>
+  </div>
+  <div
+    class="modal-backdrop"
+    *ngIf="mostrarFormulario"
+    (click)="toggleFormulario()"
+  ></div>
+
+  <div class="modal" *ngIf="mostrarFormulario" role="dialog" aria-modal="true">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h2>Nuevo cliente</h2>
+      <form (ngSubmit)="crearCliente()" #form="ngForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input
+              id="nombre"
+              type="text"
+              [(ngModel)]="nuevoCliente.nombre"
+              name="nombre"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="fecha_de_nacimiento">Fecha de nacimiento</label>
+            <input
+              id="fecha_de_nacimiento"
+              type="date"
+              [(ngModel)]="nuevoCliente.fecha_de_nacimiento"
+              name="fecha_de_nacimiento"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              type="text"
+              [(ngModel)]="nuevoCliente.email"
+              name="email"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="telefono">Teléfono</label>
+            <input
+              id="telefono"
+              type="number"
+              [(ngModel)]="nuevoCliente.telefono"
+              name="telefono"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="cancelar" (click)="toggleFormulario()">
+            Cancelar
+          </button>
+          <button type="submit" [disabled]="form.invalid">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <input
+    type="text"
+    placeholder="Buscar"
+    [(ngModel)]="busqueda"
+    (input)="filtrar()"
+    class="buscador"
+  />
+
+  <div *ngIf="loading" class="spinner">Cargando...</div>
+
+  <table class="custom-table" *ngIf="!loading && clientes.length">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Fecha Nacimiento</th>
+        <th>Email</th>
+        <th>Teléfono</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cliente of clientes">
+        <td>{{ cliente.nombre }}</td>
+        <td>{{ cliente.fecha_de_nacimiento | date : "dd/MM/yyyy" }}</td>
+        <td>{{ cliente.email }}</td>
+        <td class="nombre-con-icono">
+          {{ cliente.telefono }}
+
+          <button
+            class="btn-icono"
+            aria-label="Eliminar producto"
+            title="Eliminar producto"
+            (click)="eliminarCliente(cliente._id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!loading && !clientes.length">No hay clientes para mostrar.</p>
+
+  <div class="paginacion" *ngIf="!loading && clientes.length">
+    <button (click)="anterior()" [disabled]="paginaActual === 0">
+      ← Anterior
+    </button>
+    <span>Página {{ paginaActual + 1 }}</span>
+    <button (click)="siguiente()" [disabled]="!hayMasClientes">
+      Siguiente →
+    </button>
+  </div>
+</mat-card>
+<div *ngIf="toastVisible" class="toast" [ngClass]="toastTipo">
+  {{ toastMensaje }}
+</div>

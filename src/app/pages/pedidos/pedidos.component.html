@@ -1,0 +1,152 @@
+<mat-card>
+  <div class="card-header">
+    <mat-card-title>Lista de pedidos</mat-card-title>
+    <button class="btn-crear" (click)="toggleFormulario()">
+      + Crear pedido
+    </button>
+  </div>
+  <div
+    class="modal-backdrop"
+    *ngIf="mostrarFormulario"
+    (click)="toggleFormulario()"
+  ></div>
+
+  <div class="modal" *ngIf="mostrarFormulario" role="dialog" aria-modal="true">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h2>Nuevo pedido</h2>
+      <form (ngSubmit)="crearPedido()" #form="ngForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="numero_de_pedido">Número pedido</label>
+            <input
+              id="numero_de_pedido"
+              type="number"
+              [(ngModel)]="nuevoPedido.numero_de_pedido"
+              name="numero_de_pedido"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="importe">Importe</label>
+            <input
+              id="importe"
+              type="number"
+              [(ngModel)]="nuevoPedido.importe"
+              name="importe"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="categoria">Importe + impuestos</label>
+            <input
+              id="importe_impuestos"
+              type="number"
+              [(ngModel)]="nuevoPedido.importe_impuestos"
+              name="importe_impuestos"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="cantidad">Cantidad productos</label>
+            <input
+              id="cantidad_de_productos"
+              type="number"
+              [(ngModel)]="nuevoPedido.cantidad_de_productos"
+              name="cantidad_de_productos"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="fecha">Fecha</label>
+            <input
+              id="fecha"
+              type="date"
+              [(ngModel)]="nuevoPedido.fecha"
+              name="fecha"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="nombre_cliente">Nombre Cliente</label>
+            <input
+              id="nombre_cliente"
+              type="text"
+              [(ngModel)]="nuevoPedido.nombre_cliente"
+              name="nombre_cliente"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="cancelar" (click)="toggleFormulario()">
+            Cancelar
+          </button>
+          <button type="submit" [disabled]="form.invalid">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <input
+    type="text"
+    placeholder="Buscar"
+    [(ngModel)]="busqueda"
+    (input)="filtrar()"
+    class="buscador"
+  />
+
+  <div *ngIf="loading" class="spinner">Cargando...</div>
+
+  <table class="custom-table" *ngIf="!loading && pedidos.length">
+    <thead>
+      <tr>
+        <th>Número de pedido</th>
+        <th>Importe</th>
+        <th>Importe + impuestos</th>
+        <th>Cantidad</th>
+        <th>Fecha</th>
+        <th>Nombre Cliente</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pedido of pedidos">
+        <td>{{ pedido.numero_de_pedido }}</td>
+        <td>{{ pedido.importe }} €</td>
+        <td>{{ pedido.importe_impuestos }} €</td>
+        <td>{{ pedido.cantidad_de_productos }}</td>
+        <td>{{ pedido.fecha | date : "dd/MM/yyyy" }}</td>
+        <td class="nombre-con-icono">
+          {{ pedido.nombre_cliente }}
+          <button
+            class="btn-icono"
+            aria-label="Eliminar producto"
+            title="Eliminar producto"
+            (click)="eliminarPedido(pedido._id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!loading && !pedidos.length">No hay pedidos para mostrar.</p>
+
+  <div class="paginacion" *ngIf="!loading && pedidos.length">
+    <button (click)="anterior()" [disabled]="paginaActual === 0">
+      ← Anterior
+    </button>
+    <span>Página {{ paginaActual + 1 }}</span>
+    <button (click)="siguiente()" [disabled]="!hayMasPedidos">
+      Siguiente →
+    </button>
+  </div>
+</mat-card>
+<div *ngIf="toastVisible" class="toast" [ngClass]="toastTipo">
+  {{ toastMensaje }}
+</div>
