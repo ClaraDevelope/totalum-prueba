@@ -15,7 +15,7 @@
   <div class="modal" *ngIf="mostrarFormulario" role="dialog" aria-modal="true">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <h2>Nuevo producto</h2>
-      <form (ngSubmit)="crearProducto()" #form="ngForm">
+      <form (ngSubmit)="crear(nuevoProducto)" #form="ngForm">
         <div class="form-grid">
           <div class="form-group">
             <label for="nombre">Nombre</label>
@@ -82,7 +82,7 @@
 
   <div *ngIf="loading" class="spinner">Cargando...</div>
 
-  <table class="custom-table" *ngIf="!loading && productos.length">
+  <table class="custom-table" *ngIf="!loading && items.length">
     <thead>
       <tr>
         <th>Nombre</th>
@@ -92,7 +92,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let producto of productos">
+      <tr *ngFor="let producto of items">
         <td>{{ producto.nombre }}</td>
         <td>{{ producto.precio }} €</td>
         <td>{{ producto.categoria }}</td>
@@ -102,7 +102,7 @@
             class="btn-icono"
             aria-label="Eliminar producto"
             title="Eliminar producto"
-            (click)="eliminarProducto(producto._id)"
+            (click)="eliminar(producto._id)"
           >
             <mat-icon>delete</mat-icon>
           </button>
@@ -111,18 +111,17 @@
     </tbody>
   </table>
 
-  <p *ngIf="!loading && !productos.length">No hay productos para mostrar.</p>
+  <p *ngIf="!loading && !items.length">No hay productos para mostrar.</p>
 
-  <div class="paginacion" *ngIf="!loading && productos.length">
+  <div class="paginacion" *ngIf="!loading && items.length">
     <button (click)="anterior()" [disabled]="paginaActual === 0">
       ← Anterior
     </button>
     <span>Página {{ paginaActual + 1 }}</span>
-    <button (click)="siguiente()" [disabled]="!hayMasProductos">
-      Siguiente →
-    </button>
+    <button (click)="siguiente()" [disabled]="!hayMas">Siguiente →</button>
   </div>
 </mat-card>
+
 <div *ngIf="toastVisible" class="toast" [ngClass]="toastTipo">
   {{ toastMensaje }}
 </div>

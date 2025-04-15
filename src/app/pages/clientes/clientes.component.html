@@ -5,6 +5,7 @@
       + Crear cliente
     </button>
   </div>
+
   <div
     class="modal-backdrop"
     *ngIf="mostrarFormulario"
@@ -14,7 +15,7 @@
   <div class="modal" *ngIf="mostrarFormulario" role="dialog" aria-modal="true">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <h2>Nuevo cliente</h2>
-      <form (ngSubmit)="crearCliente()" #form="ngForm">
+      <form (ngSubmit)="crear(nuevoCliente)" #form="ngForm">
         <div class="form-grid">
           <div class="form-group">
             <label for="nombre">Nombre</label>
@@ -70,6 +71,7 @@
       </form>
     </div>
   </div>
+
   <input
     type="text"
     placeholder="Buscar"
@@ -80,7 +82,7 @@
 
   <div *ngIf="loading" class="spinner">Cargando...</div>
 
-  <table class="custom-table" *ngIf="!loading && clientes.length">
+  <table class="custom-table" *ngIf="!loading && items.length">
     <thead>
       <tr>
         <th>Nombre</th>
@@ -90,18 +92,17 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let cliente of clientes">
+      <tr *ngFor="let cliente of items">
         <td>{{ cliente.nombre }}</td>
         <td>{{ cliente.fecha_de_nacimiento | date : "dd/MM/yyyy" }}</td>
         <td>{{ cliente.email }}</td>
         <td class="nombre-con-icono">
           {{ cliente.telefono }}
-
           <button
             class="btn-icono"
-            aria-label="Eliminar producto"
-            title="Eliminar producto"
-            (click)="eliminarCliente(cliente._id)"
+            aria-label="Eliminar cliente"
+            title="Eliminar cliente"
+            (click)="eliminar(cliente._id)"
           >
             <mat-icon>delete</mat-icon>
           </button>
@@ -110,18 +111,17 @@
     </tbody>
   </table>
 
-  <p *ngIf="!loading && !clientes.length">No hay clientes para mostrar.</p>
+  <p *ngIf="!loading && !items.length">No hay clientes para mostrar.</p>
 
-  <div class="paginacion" *ngIf="!loading && clientes.length">
+  <div class="paginacion" *ngIf="!loading && items.length">
     <button (click)="anterior()" [disabled]="paginaActual === 0">
       ← Anterior
     </button>
     <span>Página {{ paginaActual + 1 }}</span>
-    <button (click)="siguiente()" [disabled]="!hayMasClientes">
-      Siguiente →
-    </button>
+    <button (click)="siguiente()" [disabled]="!hayMas">Siguiente →</button>
   </div>
 </mat-card>
+
 <div *ngIf="toastVisible" class="toast" [ngClass]="toastTipo">
   {{ toastMensaje }}
 </div>

@@ -1,4 +1,4 @@
-import { secretEnvironment } from './enviroment.secret';
+import { secretEnvironment } from './environment.secret';
 
 export const environment = {
   production: false,

@@ -1,67 +1,19 @@
 import { Injectable } from '@angular/core';
-import { TotalumApiSdk } from 'totalum-api-sdk';
-import { environment } from '../../../enviroments/enviroment';
+import { TotalumBaseService } from '../totalum-base.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProductosService {
-  private totalumSdk: TotalumApiSdk;
+export class ProductosService extends TotalumBaseService {
+  getProductos(page = 0, searchText = ''): Promise<any[]> {
+    return this.getItems('productos', page, 'nombre', searchText);
+  }
 
-  constructor() {
-    const options = {
-      apiKey: environment.totalumApiKey,
-    };
-    this.totalumSdk = new TotalumApiSdk(options);
+  createProducto(data: any): Promise<any> {
+    return this.createItem('productos', data);
   }
-  async getProductos(
-    page: number = 0,
-    searchText: string = ''
-  ): Promise<any[]> {
-    try {
-      const query: any = {
-        sort: { createdAt: 1 },
-        pagination: {
-          page,
-          limit: 5,
-        },
-      };
 
-      if (searchText.trim()) {
-        query.filter = [{ nombre: { regex: searchText, options: 'i' } }];
-      }
-      const response = await this.totalumSdk.crud.getItems('productos', query);
-      return response.data.data;
-    } catch (error: any) {
-      console.error('❌ Error:', error?.toString());
-      console.error(error?.response?.data);
-      return [];
-    }
-  }
-  async createProducto(nuevoProducto: any): Promise<any> {
-    try {
-      const response = await this.totalumSdk.crud.createItem(
-        'productos',
-        nuevoProducto
-      );
-      return response.data;
-    } catch (error: any) {
-      console.error('❌ Error al crear producto:', error?.toString());
-      console.error(error?.response?.data);
-      throw error;
-    }
-  }
-  async deleteProductoById(id: string): Promise<any> {
-    try {
-      const response = await this.totalumSdk.crud.deleteItemById(
-        'productos',
-        id
-      );
-      return response.data;
-    } catch (error: any) {
-      console.error('❌ Error al eliminar producto:', error?.toString());
-      console.error(error?.response?.data);
-      throw error;
-    }
+  deleteProductoById(id: string): Promise<any> {
+    return this.deleteItemById('productos', id);
   }
 }
