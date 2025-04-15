@@ -1,7 +1,12 @@
 <mat-card>
   <div class="card-header">
     <mat-card-title>Lista de pedidos</mat-card-title>
-    <button class="btn-crear" (click)="toggleFormulario()">
+    <button
+      class="btn-crear"
+      (click)="toggleFormulario()"
+      aria-label="Crear nuevo pedido"
+      title="Crear nuevo pedido"
+    >
       + Crear pedido
     </button>
   </div>
@@ -10,11 +15,19 @@
     class="modal-backdrop"
     *ngIf="mostrarFormulario"
     (click)="toggleFormulario()"
+    aria-hidden="true"
   ></div>
 
-  <div class="modal" *ngIf="mostrarFormulario" role="dialog" aria-modal="true">
+  <div
+    class="modal"
+    *ngIf="mostrarFormulario"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="formulario-titulo"
+  >
     <div class="modal-content" (click)="$event.stopPropagation()">
-      <h2>Nuevo pedido</h2>
+      <h2 id="formulario-titulo">Nuevo pedido</h2>
+
       <form (ngSubmit)="crear(nuevoPedido)" #form="ngForm">
         <div class="form-grid">
           <div class="form-group">
@@ -85,10 +98,23 @@
         </div>
 
         <div class="modal-actions">
-          <button type="button" class="cancelar" (click)="toggleFormulario()">
+          <button
+            type="button"
+            class="cancelar"
+            (click)="toggleFormulario()"
+            aria-label="Cancelar creación de pedido"
+            title="Cancelar"
+          >
             Cancelar
           </button>
-          <button type="submit" [disabled]="form.invalid">Guardar</button>
+          <button
+            type="submit"
+            [disabled]="form.invalid"
+            aria-label="Guardar pedido"
+            title="Guardar pedido"
+          >
+            Guardar
+          </button>
         </div>
       </form>
     </div>
@@ -97,36 +123,46 @@
   <input
     type="text"
     placeholder="Buscar"
+    aria-label="Buscar pedidos por nombre de cliente"
+    title="Buscar pedidos por nombre de cliente"
     [(ngModel)]="busqueda"
     (input)="filtrar()"
     class="buscador"
   />
 
-  <div *ngIf="loading" class="spinner">Cargando...</div>
+  <div *ngIf="loading" class="spinner" role="status" aria-live="polite">
+    Cargando...
+  </div>
 
-  <table class="custom-table" *ngIf="!loading && items.length">
+  <table
+    class="custom-table"
+    *ngIf="!loading && items.length"
+    aria-label="Lista de pedidos"
+  >
     <thead>
       <tr>
-        <th>Número de pedido</th>
-        <th>Importe</th>
-        <th>Importe + impuestos</th>
-        <th>Cantidad</th>
-        <th>Fecha</th>
-        <th>Nombre Cliente</th>
+        <th scope="col">Número de pedido</th>
+        <th scope="col">Importe</th>
+        <th scope="col">Importe + impuestos</th>
+        <th scope="col">Cantidad</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Nombre Cliente</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let pedido of items">
-        <td>{{ pedido.numero_de_pedido }}</td>
-        <td>{{ pedido.importe }} €</td>
-        <td>{{ pedido.importe_impuestos }} €</td>
-        <td>{{ pedido.cantidad_de_productos }}</td>
-        <td>{{ pedido.fecha | date : "dd/MM/yyyy" }}</td>
-        <td class="nombre-con-icono">
+        <td data-label="Número de pedido">{{ pedido.numero_de_pedido }}</td>
+        <td data-label="Importe">{{ pedido.importe }} €</td>
+        <td data-label="Importe + impuestos">
+          {{ pedido.importe_impuestos }} €
+        </td>
+        <td data-label="Cantidad">{{ pedido.cantidad_de_productos }}</td>
+        <td data-label="Fecha">{{ pedido.fecha | date : "dd/MM/yyyy" }}</td>
+        <td data-label="Nombre Cliente" class="nombre-con-icono">
           {{ pedido.nombre_cliente }}
           <button
             class="btn-icono"
-            aria-label="Eliminar pedido"
+            [attr.aria-label]="'Eliminar pedido de ' + pedido.nombre_cliente"
             title="Eliminar pedido"
             (click)="eliminar(pedido._id)"
           >
@@ -140,14 +176,32 @@
   <p *ngIf="!loading && !items.length">No hay pedidos para mostrar.</p>
 
   <div class="paginacion" *ngIf="!loading && items.length">
-    <button (click)="anterior()" [disabled]="paginaActual === 0">
+    <button
+      (click)="anterior()"
+      [disabled]="paginaActual === 0"
+      aria-label="Página anterior"
+      title="Página anterior"
+    >
       ← Anterior
     </button>
-    <span>Página {{ paginaActual + 1 }}</span>
-    <button (click)="siguiente()" [disabled]="!hayMas">Siguiente →</button>
+    <span aria-live="polite">Página {{ paginaActual + 1 }}</span>
+    <button
+      (click)="siguiente()"
+      [disabled]="!hayMas"
+      aria-label="Página siguiente"
+      title="Página siguiente"
+    >
+      Siguiente →
+    </button>
   </div>
 </mat-card>
 
-<div *ngIf="toastVisible" class="toast" [ngClass]="toastTipo">
+<div
+  *ngIf="toastVisible"
+  class="toast"
+  [ngClass]="toastTipo"
+  role="alert"
+  aria-live="assertive"
+>
   {{ toastMensaje }}
 </div>

@@ -1,7 +1,12 @@
 <mat-card>
   <div class="card-header">
-    <mat-card-title>Lista de productos</mat-card-title>
-    <button class="btn-crear" (click)="toggleFormulario()">
+    <mat-card-title id="titulo-productos">Lista de productos</mat-card-title>
+    <button
+      class="btn-crear"
+      (click)="toggleFormulario()"
+      aria-label="Crear nuevo producto"
+      title="Crear nuevo producto"
+    >
       + Crear producto
     </button>
   </div>
@@ -10,12 +15,23 @@
     class="modal-backdrop"
     *ngIf="mostrarFormulario"
     (click)="toggleFormulario()"
+    aria-hidden="true"
   ></div>
 
-  <div class="modal" *ngIf="mostrarFormulario" role="dialog" aria-modal="true">
+  <div
+    class="modal"
+    *ngIf="mostrarFormulario"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titulo-modal-producto"
+  >
     <div class="modal-content" (click)="$event.stopPropagation()">
-      <h2>Nuevo producto</h2>
-      <form (ngSubmit)="crear(nuevoProducto)" #form="ngForm">
+      <h2 id="titulo-modal-producto">Nuevo producto</h2>
+      <form
+        (ngSubmit)="crear(nuevoProducto)"
+        #form="ngForm"
+        aria-labelledby="titulo-modal-producto"
+      >
         <div class="form-grid">
           <div class="form-group">
             <label for="nombre">Nombre</label>
@@ -25,6 +41,7 @@
               [(ngModel)]="nuevoProducto.nombre"
               name="nombre"
               required
+              aria-label="Nombre del producto"
             />
           </div>
 
@@ -36,6 +53,7 @@
               [(ngModel)]="nuevoProducto.precio"
               name="precio"
               required
+              aria-label="Precio del producto"
             />
           </div>
 
@@ -47,6 +65,7 @@
               [(ngModel)]="nuevoProducto.categoria"
               name="categoria"
               required
+              aria-label="Categoría del producto"
             />
           </div>
 
@@ -58,15 +77,29 @@
               [(ngModel)]="nuevoProducto.cantidad"
               name="cantidad"
               required
+              aria-label="Cantidad disponible"
             />
           </div>
         </div>
 
         <div class="modal-actions">
-          <button type="button" class="cancelar" (click)="toggleFormulario()">
+          <button
+            type="button"
+            class="cancelar"
+            (click)="toggleFormulario()"
+            aria-label="Cancelar creación de producto"
+            title="Cancelar"
+          >
             Cancelar
           </button>
-          <button type="submit" [disabled]="form.invalid">Guardar</button>
+          <button
+            type="submit"
+            [disabled]="form.invalid"
+            aria-label="Guardar producto"
+            title="Guardar"
+          >
+            Guardar
+          </button>
         </div>
       </form>
     </div>
@@ -78,30 +111,39 @@
     [(ngModel)]="busqueda"
     (input)="filtrar()"
     class="buscador"
+    aria-label="Buscar producto por nombre"
+    title="Buscar producto por nombre"
   />
 
-  <div *ngIf="loading" class="spinner">Cargando...</div>
+  <div *ngIf="loading" class="spinner" role="status" aria-live="polite">
+    Cargando...
+  </div>
 
-  <table class="custom-table" *ngIf="!loading && items.length">
+  <table
+    class="custom-table"
+    *ngIf="!loading && items.length"
+    role="table"
+    aria-describedby="titulo-productos"
+  >
     <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Precio</th>
-        <th>Categoría</th>
-        <th>Cantidad</th>
+      <tr role="row">
+        <th scope="col">Nombre</th>
+        <th scope="col">Precio</th>
+        <th scope="col">Categoría</th>
+        <th scope="col">Cantidad</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let producto of items">
-        <td>{{ producto.nombre }}</td>
-        <td>{{ producto.precio }} €</td>
-        <td>{{ producto.categoria }}</td>
-        <td class="cantidad-con-boton">
+      <tr *ngFor="let producto of items" role="row">
+        <td data-label="Nombre">{{ producto.nombre }}</td>
+        <td data-label="Precio">{{ producto.precio }} €</td>
+        <td data-label="Categoría">{{ producto.categoria }}</td>
+        <td data-label="Cantidad" class="cantidad-con-boton">
           {{ producto.cantidad }}
           <button
             class="btn-icono"
-            aria-label="Eliminar producto"
-            title="Eliminar producto"
+            [attr.aria-label]="'Eliminar producto ' + producto.nombre"
+            title="Eliminar producto {{ producto.nombre }}"
             (click)="eliminar(producto._id)"
           >
             <mat-icon>delete</mat-icon>
@@ -111,17 +153,37 @@
     </tbody>
   </table>
 
-  <p *ngIf="!loading && !items.length">No hay productos para mostrar.</p>
+  <p *ngIf="!loading && !items.length" aria-live="polite">
+    No hay productos para mostrar.
+  </p>
 
   <div class="paginacion" *ngIf="!loading && items.length">
-    <button (click)="anterior()" [disabled]="paginaActual === 0">
+    <button
+      (click)="anterior()"
+      [disabled]="paginaActual === 0"
+      aria-label="Página anterior"
+      title="Anterior"
+    >
       ← Anterior
     </button>
     <span>Página {{ paginaActual + 1 }}</span>
-    <button (click)="siguiente()" [disabled]="!hayMas">Siguiente →</button>
+    <button
+      (click)="siguiente()"
+      [disabled]="!hayMas"
+      aria-label="Página siguiente"
+      title="Siguiente"
+    >
+      Siguiente →
+    </button>
   </div>
 </mat-card>
 
-<div *ngIf="toastVisible" class="toast" [ngClass]="toastTipo">
+<div
+  *ngIf="toastVisible"
+  class="toast"
+  [ngClass]="toastTipo"
+  role="alert"
+  aria-live="assertive"
+>
   {{ toastMensaje }}
 </div>

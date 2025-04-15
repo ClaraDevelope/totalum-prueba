@@ -64,12 +64,12 @@ mat-card-title {
 }
 
 .paginacion button {
-  padding: 0.4rem 1rem;
+  padding: 0.6rem 1.2rem;
   border: none;
-  border-radius: 0.125rem;
+  border-radius: 0.25rem;
   background-color: #1e5dc3;
   color: rgb(228, 225, 225);
-  font-weight: 500;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -324,7 +324,7 @@ a.active::after {
   color: white;
   font-weight: 500;
   font-size: 0.95rem;
-  z-index: 20;
+  z-index: 9999999;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   animation: fadeInOut 3s ease forwards;
   pointer-events: none;
@@ -354,5 +354,150 @@ a.active::after {
   100% {
     opacity: 0;
     transform: translateY(20px);
+  }
+}
+
+@media (max-width: 768px) {
+  .card-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .btn-crear {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .buscador {
+    font-size: 1rem;
+    width: 90%;
+  }
+
+  .custom-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .custom-table table,
+  .custom-table thead,
+  .custom-table tbody,
+  .custom-table th,
+  .custom-table td,
+  .custom-table tr {
+    display: block;
+  }
+
+  .custom-table thead {
+    display: none;
+  }
+
+  .custom-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #ffffff;
+  }
+
+  .custom-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: none;
+    font-size: 0.95rem;
+  }
+
+  .custom-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #374151;
+    flex-basis: 50%;
+    text-align: left;
+  }
+
+  .nombre-con-icono {
+    justify-content: space-between;
+  }
+
+  .paginacion span {
+    font-size: 0.9rem;
+  }
+
+  .modal {
+    padding: 1.5rem 1rem;
+    width: 90%;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-content h2 {
+    font-size: 1.3rem;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modal-actions .cancelar,
+  .modal-actions button[type="submit"] {
+    width: 100%;
+  }
+}
+.main-nav {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1rem 2rem;
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  font-size: 1rem;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 100;
+
+  a {
+    color: #374151;
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.2s ease;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -0.4rem;
+      left: 0;
+      height: 2px;
+      width: 100%;
+      background-color: transparent;
+      transition: background-color 0.3s ease;
+      border-radius: 1px;
+    }
+
+    &:hover {
+      color: #2563eb;
+    }
+
+    &.active {
+      color: #3b82f6;
+
+      &::after {
+        background-color: #3b82f6;
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    gap: 1.2rem;
+    font-size: 0.95rem;
   }
 }

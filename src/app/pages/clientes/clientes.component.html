@@ -1,7 +1,12 @@
 <mat-card>
   <div class="card-header">
     <mat-card-title>Lista de clientes</mat-card-title>
-    <button class="btn-crear" (click)="toggleFormulario()">
+    <button
+      class="btn-crear"
+      (click)="toggleFormulario()"
+      aria-label="Crear nuevo cliente"
+      title="Crear nuevo cliente"
+    >
       + Crear cliente
     </button>
   </div>
@@ -10,11 +15,18 @@
     class="modal-backdrop"
     *ngIf="mostrarFormulario"
     (click)="toggleFormulario()"
+    aria-hidden="true"
   ></div>
 
-  <div class="modal" *ngIf="mostrarFormulario" role="dialog" aria-modal="true">
+  <div
+    class="modal"
+    *ngIf="mostrarFormulario"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="formulario-titulo"
+  >
     <div class="modal-content" (click)="$event.stopPropagation()">
-      <h2>Nuevo cliente</h2>
+      <h2 id="formulario-titulo">Nuevo cliente</h2>
       <form (ngSubmit)="crear(nuevoCliente)" #form="ngForm">
         <div class="form-grid">
           <div class="form-group">
@@ -63,10 +75,23 @@
         </div>
 
         <div class="modal-actions">
-          <button type="button" class="cancelar" (click)="toggleFormulario()">
+          <button
+            type="button"
+            class="cancelar"
+            (click)="toggleFormulario()"
+            aria-label="Cancelar creación de cliente"
+            title="Cancelar"
+          >
             Cancelar
           </button>
-          <button type="submit" [disabled]="form.invalid">Guardar</button>
+          <button
+            type="submit"
+            [disabled]="form.invalid"
+            aria-label="Guardar cliente"
+            title="Guardar cliente"
+          >
+            Guardar
+          </button>
         </div>
       </form>
     </div>
@@ -75,32 +100,42 @@
   <input
     type="text"
     placeholder="Buscar"
+    aria-label="Buscar clientes por nombre"
+    title="Buscar clientes por nombre"
     [(ngModel)]="busqueda"
     (input)="filtrar()"
     class="buscador"
   />
 
-  <div *ngIf="loading" class="spinner">Cargando...</div>
+  <div *ngIf="loading" class="spinner" role="status" aria-live="polite">
+    Cargando...
+  </div>
 
-  <table class="custom-table" *ngIf="!loading && items.length">
+  <table
+    class="custom-table"
+    *ngIf="!loading && items.length"
+    aria-label="Lista de clientes"
+  >
     <thead>
       <tr>
-        <th>Nombre</th>
-        <th>Fecha Nacimiento</th>
-        <th>Email</th>
-        <th>Teléfono</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Fecha Nacimiento</th>
+        <th scope="col">Email</th>
+        <th scope="col">Teléfono</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let cliente of items">
-        <td>{{ cliente.nombre }}</td>
-        <td>{{ cliente.fecha_de_nacimiento | date : "dd/MM/yyyy" }}</td>
-        <td>{{ cliente.email }}</td>
-        <td class="nombre-con-icono">
+        <td data-label="Nombre">{{ cliente.nombre }}</td>
+        <td data-label="Fecha nacimiento">
+          {{ cliente.fecha_de_nacimiento | date : "dd/MM/yyyy" }}
+        </td>
+        <td data-label="Email">{{ cliente.email }}</td>
+        <td data-label="Teléfono" class="nombre-con-icono">
           {{ cliente.telefono }}
           <button
             class="btn-icono"
-            aria-label="Eliminar cliente"
+            [attr.aria-label]="'Eliminar cliente ' + cliente.nombre"
             title="Eliminar cliente"
             (click)="eliminar(cliente._id)"
           >
@@ -114,14 +149,32 @@
   <p *ngIf="!loading && !items.length">No hay clientes para mostrar.</p>
 
   <div class="paginacion" *ngIf="!loading && items.length">
-    <button (click)="anterior()" [disabled]="paginaActual === 0">
+    <button
+      (click)="anterior()"
+      [disabled]="paginaActual === 0"
+      aria-label="Página anterior"
+      title="Página anterior"
+    >
       ← Anterior
     </button>
-    <span>Página {{ paginaActual + 1 }}</span>
-    <button (click)="siguiente()" [disabled]="!hayMas">Siguiente →</button>
+    <span aria-live="polite">Página {{ paginaActual + 1 }}</span>
+    <button
+      (click)="siguiente()"
+      [disabled]="!hayMas"
+      aria-label="Página siguiente"
+      title="Página siguiente"
+    >
+      Siguiente →
+    </button>
   </div>
 </mat-card>
 
-<div *ngIf="toastVisible" class="toast" [ngClass]="toastTipo">
+<div
+  *ngIf="toastVisible"
+  class="toast"
+  [ngClass]="toastTipo"
+  role="alert"
+  aria-live="assertive"
+>
   {{ toastMensaje }}
 </div>

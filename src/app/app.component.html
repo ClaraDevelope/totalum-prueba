@@ -1,14 +1,25 @@
-<nav style="padding: 1rem; background-color: #f5f5f5">
+<nav class="main-nav" role="navigation" aria-label="Navegación principal">
   <a
     routerLink="/productos"
     routerLinkActive="active"
-    style="margin-right: 1rem"
+    aria-current="page"
+    title="Ir a la sección de productos"
     >Productos</a
   >
-  <a routerLink="/pedidos" routerLinkActive="active" style="margin-right: 1rem"
+  <a
+    routerLink="/pedidos"
+    routerLinkActive="active"
+    aria-current="page"
+    title="Ir a la sección de pedidos"
     >Pedidos</a
   >
-  <a routerLink="/clientes" routerLinkActive="active">Clientes</a>
+  <a
+    routerLink="/clientes"
+    routerLinkActive="active"
+    aria-current="page"
+    title="Ir a la sección de clientes"
+    >Clientes</a
+  >
 </nav>
 
 <router-outlet></router-outlet>
