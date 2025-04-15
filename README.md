@@ -64,9 +64,9 @@ Los componentes específicos (`ProductosComponent`, `PedidosComponent`, `Cliente
 
 ## 💡 Notas
 
-- El desarrollo del proyecto se ha basado en las indicaciones proporcionadas en el vídeo de Totalum incluido en la oferta de empleo.
-- Se ha incorporado funcionalidad adicional para permitir la creación y eliminación de registros desde el panel, utilizando formularios en modales y botones con retroalimentación visual.
-- La interfaz cuenta con un diseño responsive y se ha trabajado especialmente la accesibilidad para asegurar una experiencia de uso adecuada en distintos dispositivos y para distintos perfiles de usuario.
+- Para este desarrollo me he basado en las indicaciones proporcionadas en el vídeo de Totalum incluido en la oferta de empleo.
+- He incorporado funcionalidad adicional para permitir la creación y eliminación de registros desde el panel, utilizando formularios en modales y botones con retroalimentación visual.
+- La interfaz cuenta con un diseño responsive y he trabajado especialmente la accesibilidad para asegurar una experiencia de uso adecuada en distintos dispositivos y para distintos perfiles de usuario.
 
 ---
 
