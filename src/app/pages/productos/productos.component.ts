@@ -48,4 +48,12 @@ export class ProductosComponent extends BaseListadoComponent<any> {
   override deleteItem(id: string): Promise<any> {
     return this.productosService.deleteProductoById(id);
   }
+
+  override editItem(id: string, item: any): Promise<any> {
+    return this.productosService.editProductoById(id, item);
+  }
+
+  override getAllSinPaginacion(): Promise<any[]> {
+    return this.productosService.getAllProductosSinPaginacion();
+  }
 }

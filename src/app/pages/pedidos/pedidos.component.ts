@@ -37,6 +37,7 @@ export class PedidosComponent extends BaseListadoComponent<any> {
   ngOnInit(): void {
     this.cargarPagina(0);
   }
+
   override getItems(page: number, search: string): Promise<any[]> {
     return this.pedidosService.getPedidos(page, search);
   }
@@ -47,5 +48,13 @@ export class PedidosComponent extends BaseListadoComponent<any> {
 
   override deleteItem(id: string): Promise<any> {
     return this.pedidosService.deletePedidoById(id);
+  }
+
+  override editItem(id: string, item: any): Promise<any> {
+    return this.pedidosService.editPedidoById(id, item);
+  }
+
+  override getAllSinPaginacion(): Promise<any[]> {
+    return this.pedidosService.getAllPedidosSinPaginacion();
   }
 }

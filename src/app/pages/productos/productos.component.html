@@ -1,14 +1,26 @@
 <mat-card>
   <div class="card-header">
     <mat-card-title id="titulo-productos">Lista de productos</mat-card-title>
-    <button
-      class="btn-crear"
-      (click)="toggleFormulario()"
-      aria-label="Crear nuevo producto"
-      title="Crear nuevo producto"
-    >
-      + Crear producto
-    </button>
+    <div class="acciones-header">
+      <button
+        class="btn-exportar"
+        (click)="exportarCSV()"
+        aria-label="Exportar listado de productos"
+        title="Exportar listado de productos"
+      >
+        <mat-icon>file_download</mat-icon>
+        Exportar CSV
+      </button>
+
+      <button
+        class="btn-crear"
+        (click)="toggleFormulario()"
+        aria-label="Crear nuevo producto"
+        title="Crear nuevo producto"
+      >
+        + Crear producto
+      </button>
+    </div>
   </div>
 
   <div
@@ -135,11 +147,53 @@
     </thead>
     <tbody>
       <tr *ngFor="let producto of items" role="row">
-        <td data-label="Nombre">{{ producto.nombre }}</td>
-        <td data-label="Precio">{{ producto.precio }} €</td>
-        <td data-label="Categoría">{{ producto.categoria }}</td>
+        <td data-label="Nombre">
+          <ng-container *ngIf="editando.has(producto._id); else nombreTexto">
+            <input
+              type="text"
+              class="input-inline"
+              [(ngModel)]="copias[producto._id].nombre"
+              required
+            />
+          </ng-container>
+          <ng-template #nombreTexto>{{ producto.nombre }}</ng-template>
+        </td>
+
+        <td data-label="Precio">
+          <ng-container *ngIf="editando.has(producto._id); else precioTexto">
+            <input
+              type="number"
+              class="input-inline"
+              [(ngModel)]="copias[producto._id].precio"
+              required
+            />
+          </ng-container>
+          <ng-template #precioTexto>{{ producto.precio }} €</ng-template>
+        </td>
+
+        <td data-label="Categoría">
+          <ng-container *ngIf="editando.has(producto._id); else categoriaTexto">
+            <input
+              type="text"
+              class="input-inline"
+              [(ngModel)]="copias[producto._id].categoria"
+              required
+            />
+          </ng-container>
+          <ng-template #categoriaTexto>{{ producto.categoria }}</ng-template>
+        </td>
+
         <td data-label="Cantidad" class="cantidad-con-boton">
-          {{ producto.cantidad }}
+          <ng-container *ngIf="editando.has(producto._id); else cantidadTexto">
+            <input
+              type="number"
+              class="input-inline"
+              [(ngModel)]="copias[producto._id].cantidad"
+              required
+            />
+          </ng-container>
+          <ng-template #cantidadTexto>{{ producto.cantidad }}</ng-template>
+
           <button
             class="btn-icono"
             [attr.aria-label]="'Eliminar producto ' + producto.nombre"
@@ -147,6 +201,24 @@
             (click)="eliminar(producto._id)"
           >
             <mat-icon>delete</mat-icon>
+          </button>
+
+          <button
+            class="btn-icono"
+            [ngClass]="
+              editando.has(producto._id) ? 'btn-guardar' : 'btn-editar'
+            "
+            [attr.aria-label]="
+              editando.has(producto._id)
+                ? 'Guardar cambios de ' + producto.nombre
+                : 'Editar producto ' + producto.nombre
+            "
+            [title]="editando.has(producto._id) ? 'Guardar' : 'Editar'"
+            (click)="toggleEditar(producto)"
+          >
+            <mat-icon>{{
+              editando.has(producto._id) ? "save" : "edit"
+            }}</mat-icon>
           </button>
         </td>
       </tr>

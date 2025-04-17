@@ -1,25 +1,58 @@
-<nav class="main-nav" role="navigation" aria-label="Navegación principal">
-  <a
-    routerLink="/productos"
-    routerLinkActive="active"
-    aria-current="page"
-    title="Ir a la sección de productos"
-    >Productos</a
-  >
-  <a
-    routerLink="/pedidos"
-    routerLinkActive="active"
-    aria-current="page"
-    title="Ir a la sección de pedidos"
-    >Pedidos</a
-  >
-  <a
-    routerLink="/clientes"
-    routerLinkActive="active"
-    aria-current="page"
-    title="Ir a la sección de clientes"
-    >Clientes</a
-  >
-</nav>
+<header class="top-bar">
+  <div class="nav-container">
+    <div class="logo-title-container">
+      <img
+        class="logo"
+        src="/totalum-logo-recortado.png"
+        alt="Logo de Totalum"
+      />
+      <span class="name-logo">Totalum</span>
+    </div>
+
+    <div class="acciones-header">
+      <nav class="nav-desktop">
+        <a routerLink="/productos" routerLinkActive="active">Productos</a>
+        <a routerLink="/pedidos" routerLinkActive="active">Pedidos</a>
+        <a routerLink="/clientes" routerLinkActive="active">Clientes</a>
+      </nav>
+
+      <button
+        class="btn-modo"
+        (click)="toggleModoOscuro()"
+        aria-label="Cambiar modo"
+      >
+        <mat-icon>{{ isDarkMode ? "light_mode" : "dark_mode" }}</mat-icon>
+      </button>
+
+      <button
+        class="btn-hamburger"
+        (click)="toggleMenu()"
+        aria-label="Abrir menú"
+      >
+        <mat-icon>{{ isMenuOpen ? "close" : "menu" }}</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <nav class="nav-mobile" [class.open]="isMenuOpen">
+    <a routerLink="/productos" routerLinkActive="active" (click)="toggleMenu()"
+      >Productos</a
+    >
+    <a routerLink="/pedidos" routerLinkActive="active" (click)="toggleMenu()"
+      >Pedidos</a
+    >
+    <a routerLink="/clientes" routerLinkActive="active" (click)="toggleMenu()"
+      >Clientes</a
+    >
+
+    <button
+      class="btn-modo-movil"
+      (click)="toggleModoOscuro()"
+      aria-label="Cambiar modo"
+    >
+      <mat-icon>{{ isDarkMode ? "light_mode" : "dark_mode" }}</mat-icon>
+    </button>
+  </nav>
+</header>
 
 <router-outlet></router-outlet>

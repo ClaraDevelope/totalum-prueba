@@ -1,14 +1,26 @@
 <mat-card>
   <div class="card-header">
     <mat-card-title>Lista de pedidos</mat-card-title>
-    <button
-      class="btn-crear"
-      (click)="toggleFormulario()"
-      aria-label="Crear nuevo pedido"
-      title="Crear nuevo pedido"
-    >
-      + Crear pedido
-    </button>
+    <div class="acciones-header">
+      <button
+        class="btn-exportar"
+        (click)="exportarCSV()"
+        aria-label="Exportar listado de pedidos"
+        title="Exportar listado de pedidos"
+      >
+        <mat-icon>file_download</mat-icon>
+        Exportar CSV
+      </button>
+
+      <button
+        class="btn-crear"
+        (click)="toggleFormulario()"
+        aria-label="Crear nuevo pedido"
+        title="Crear nuevo pedido"
+      >
+        + Crear pedido
+      </button>
+    </div>
   </div>
 
   <div
@@ -151,15 +163,84 @@
     </thead>
     <tbody>
       <tr *ngFor="let pedido of items">
-        <td data-label="Número de pedido">{{ pedido.numero_de_pedido }}</td>
-        <td data-label="Importe">{{ pedido.importe }} €</td>
-        <td data-label="Importe + impuestos">
-          {{ pedido.importe_impuestos }} €
+        <td data-label="Número de pedido">
+          <ng-container *ngIf="editando.has(pedido._id); else pedidoTexto">
+            <input
+              type="text"
+              class="input-inline"
+              [(ngModel)]="copias[pedido._id].numero_de_pedido"
+              required
+            />
+          </ng-container>
+          <ng-template #pedidoTexto>{{ pedido.numero_de_pedido }}</ng-template>
         </td>
-        <td data-label="Cantidad">{{ pedido.cantidad_de_productos }}</td>
-        <td data-label="Fecha">{{ pedido.fecha | date : "dd/MM/yyyy" }}</td>
+
+        <td data-label="Importe">
+          <ng-container *ngIf="editando.has(pedido._id); else importeTexto">
+            <input
+              type="number"
+              class="input-inline"
+              [(ngModel)]="copias[pedido._id].importe"
+              required
+            />
+          </ng-container>
+          <ng-template #importeTexto>{{ pedido.importe }} €</ng-template>
+        </td>
+
+        <td data-label="Importe + impuestos">
+          <ng-container *ngIf="editando.has(pedido._id); else impuestosTexto">
+            <input
+              type="number"
+              class="input-inline"
+              [(ngModel)]="copias[pedido._id].importe_impuestos"
+              required
+            />
+          </ng-container>
+          <ng-template #impuestosTexto
+            >{{ pedido.importe_impuestos }} €</ng-template
+          >
+        </td>
+
+        <td data-label="Cantidad">
+          <ng-container *ngIf="editando.has(pedido._id); else cantidadTexto">
+            <input
+              type="number"
+              class="input-inline"
+              [(ngModel)]="copias[pedido._id].cantidad_de_productos"
+              required
+            />
+          </ng-container>
+          <ng-template #cantidadTexto>{{
+            pedido.cantidad_de_productos
+          }}</ng-template>
+        </td>
+
+        <td data-label="Fecha">
+          <ng-container *ngIf="editando.has(pedido._id); else fechaTexto">
+            <input
+              type="date"
+              class="input-inline"
+              [(ngModel)]="copias[pedido._id].fecha"
+              required
+            />
+          </ng-container>
+          <ng-template #fechaTexto>
+            {{ pedido.fecha | date : "yyyy-MM-dd" }}
+          </ng-template>
+        </td>
+
         <td data-label="Nombre Cliente" class="nombre-con-icono">
-          {{ pedido.nombre_cliente }}
+          <ng-container *ngIf="editando.has(pedido._id); else clienteTexto">
+            <input
+              type="text"
+              class="input-inline"
+              [(ngModel)]="copias[pedido._id].nombre_cliente"
+              required
+            />
+          </ng-container>
+          <ng-template #clienteTexto>{{ pedido.nombre_cliente }}</ng-template>
+
+          <!-- Botón eliminar -->
           <button
             class="btn-icono"
             [attr.aria-label]="'Eliminar pedido de ' + pedido.nombre_cliente"
@@ -167,6 +248,23 @@
             (click)="eliminar(pedido._id)"
           >
             <mat-icon>delete</mat-icon>
+          </button>
+
+          <!-- Botón editar/guardar -->
+          <button
+            class="btn-icono"
+            [ngClass]="editando.has(pedido._id) ? 'btn-guardar' : 'btn-editar'"
+            [attr.aria-label]="
+              editando.has(pedido._id)
+                ? 'Guardar cambios de ' + pedido.nombre_cliente
+                : 'Editar pedido de ' + pedido.nombre_cliente
+            "
+            [title]="editando.has(pedido._id) ? 'Guardar' : 'Editar'"
+            (click)="toggleEditar(pedido)"
+          >
+            <mat-icon>{{
+              editando.has(pedido._id) ? "save" : "edit"
+            }}</mat-icon>
           </button>
         </td>
       </tr>

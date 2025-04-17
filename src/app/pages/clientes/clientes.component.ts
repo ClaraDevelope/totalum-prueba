@@ -10,6 +10,7 @@ import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-clientes',
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -38,6 +39,7 @@ export class ClientesComponent extends BaseListadoComponent<any> {
   ngOnInit(): void {
     this.cargarPagina(0);
   }
+
   override getItems(page: number, search: string): Promise<any[]> {
     return this.clientesService.getClientes(page, search);
   }
@@ -48,5 +50,13 @@ export class ClientesComponent extends BaseListadoComponent<any> {
 
   override deleteItem(id: string): Promise<any> {
     return this.clientesService.deleteClienteById(id);
+  }
+
+  override editItem(id: string, item: any): Promise<any> {
+    return this.clientesService.editClienteById(id, item);
+  }
+
+  override getAllSinPaginacion(): Promise<any[]> {
+    return this.clientesService.getAllClientesSinPaginacion();
   }
 }

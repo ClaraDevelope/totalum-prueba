@@ -23,7 +23,7 @@ export class TotalumBaseService {
   ): Promise<any[]> {
     try {
       const query: any = {
-        sort: { createdAt: 1 },
+        sort: [{ field: 'createdAt', direction: 'asc' }],
         pagination: { page, limit: 5 },
       };
 
@@ -51,6 +51,17 @@ export class TotalumBaseService {
     }
   }
 
+  async editItemById(collection: string, id: string, data: any): Promise<any> {
+    try {
+      const response = await this.sdk.crud.editItemById(collection, id, data);
+      return response.data;
+    } catch (error: any) {
+      console.error(`❌ Error al editar en ${collection}:`, error?.toString());
+      console.error(error?.response?.data);
+      throw error;
+    }
+  }
+
   async deleteItemById(collection: string, id: string): Promise<any> {
     try {
       const response = await this.sdk.crud.deleteItemById(collection, id);
@@ -62,6 +73,25 @@ export class TotalumBaseService {
       );
       console.error(error?.response?.data);
       throw error;
+    }
+  }
+
+  async getAllItemsSinPaginacion(collection: string): Promise<any[]> {
+    try {
+      const query: any = {
+        sort: [{ field: 'createdAt', direction: 'desc' }],
+        pagination: { page: 0, limit: 1000 },
+      };
+
+      const response = await this.sdk.crud.getItems(collection, query);
+      return response.data.data;
+    } catch (error: any) {
+      console.error(
+        `❌ Error al obtener todos los items de ${collection}:`,
+        error?.toString()
+      );
+      console.error(error?.response?.data);
+      return [];
     }
   }
 }

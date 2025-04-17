@@ -65,9 +65,10 @@ Los componentes específicos (`ProductosComponent`, `PedidosComponent`, `Cliente
 ## 💡 Notas
 
 - Para este desarrollo me he basado en las indicaciones proporcionadas en el vídeo de Totalum incluido en la oferta de empleo.
-- He decidido no usar en este proyecto un backend personalizado porque Totalum ya genera automáticamente la API REST para cada tabla creada. Las llamadas se gestionan directamente desde Angular mediante servicios.
-- He incorporado funcionalidad adicional para permitir la creación y eliminación de registros desde el panel, utilizando formularios en modales y botones con retroalimentación visual.
-- La interfaz cuenta con un diseño responsive y he trabajado especialmente la accesibilidad para asegurar una experiencia de uso adecuada en distintos dispositivos y para distintos perfiles de usuario.
+- He decidido no usar un backend personalizado porque Totalum ya genera automáticamente la API REST para cada tabla creada. Las llamadas se gestionan directamente desde Angular mediante servicios.
+- He incorporado funcionalidad adicional para permitir la creación, edición y eliminación de registros desde el panel, utilizando formularios en modales, edición en línea y botones con retroalimentación visual.
+- He implementado un sistema de exportación de datos a CSV.
+- La interfaz cuenta con un diseño responsive, y he trabajado especialmente la accesibilidad (atributos aria-\*, contraste, estructura) para asegurar una experiencia adecuada en distintos dispositivos y perfiles de usuario.
 
 ---
 

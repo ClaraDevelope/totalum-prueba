@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Directive } from '@angular/core';
 
 @Directive()
-export abstract class BaseListadoComponent<T> {
+export abstract class BaseListadoComponent<T extends { _id: string }> {
   items: T[] = [];
   loading = true;
   paginaActual = 0;
@@ -12,11 +12,18 @@ export abstract class BaseListadoComponent<T> {
   toastMensaje = '';
   toastTipo: 'exito' | 'error' = 'exito';
 
+  editando: Set<string> = new Set();
+  copias: Record<string, T> = {};
+
   constructor(private cdr: ChangeDetectorRef) {}
 
   abstract getItems(page: number, searchText: string): Promise<T[]>;
   abstract createItem(item: T): Promise<void>;
   abstract deleteItem(id: string): Promise<void>;
+  abstract editItem(id: string, item: T): Promise<void>;
+
+  /** Método para exportación sin paginación */
+  abstract getAllSinPaginacion(): Promise<T[]>;
 
   async cargarPagina(pagina: number): Promise<void> {
     this.loading = true;
@@ -76,6 +83,17 @@ export abstract class BaseListadoComponent<T> {
     }
   }
 
+  async editar(id: string, actualizado: T): Promise<void> {
+    try {
+      await this.editItem(id, actualizado);
+      await this.cargarPagina(this.paginaActual);
+      this.mostrarToast('Elemento actualizado correctamente', 'exito');
+    } catch (error) {
+      console.error('❌ No se pudo editar', error);
+      this.mostrarToast('Error al actualizar', 'error');
+    }
+  }
+
   async eliminar(id: string): Promise<void> {
     try {
       await this.deleteItem(id);
@@ -100,5 +118,54 @@ export abstract class BaseListadoComponent<T> {
     this.toastTipo = tipo;
     this.toastVisible = true;
     setTimeout(() => (this.toastVisible = false), 3000);
+  }
+
+  async toggleEditar(item: T): Promise<void> {
+    const id = item._id;
+    if (this.editando.has(id)) {
+      try {
+        await this.editar(id, this.copias[id]);
+        this.editando.delete(id);
+        delete this.copias[id];
+      } catch (error) {
+        console.error('❌ Error al guardar edición', error);
+        this.mostrarToast('Error al guardar cambios', 'error');
+      }
+    } else {
+      this.editando.add(id);
+      this.copias[id] = { ...item };
+    }
+  }
+
+  cancelarEdicion(id: string): void {
+    this.editando.delete(id);
+    delete this.copias[id];
+  }
+
+  exportarCSV(): void {
+    this.getAllSinPaginacion().then((data: T[]) => {
+      if (!data || data.length === 0) return;
+
+      const columnas = Object.keys(data[0]);
+      const encabezado = columnas.join(',');
+      const filas = data.map((row) => {
+        return columnas
+          .map((campo) => {
+            const valor = row[campo as keyof T] ?? '';
+            return `"${String(valor).replace(/"/g, '""')}"`;
+          })
+          .join(',');
+      });
+
+      const csv = [encabezado, ...filas].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'export.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
   }
 }

@@ -13,7 +13,15 @@ export class ProductosService extends TotalumBaseService {
     return this.createItem('productos', data);
   }
 
+  editProductoById(id: string, data: any): Promise<any> {
+    return this.editItemById('productos', id, data);
+  }
+
   deleteProductoById(id: string): Promise<any> {
     return this.deleteItemById('productos', id);
+  }
+
+  getAllProductosSinPaginacion(): Promise<any[]> {
+    return this.getAllItemsSinPaginacion('productos');
   }
 }

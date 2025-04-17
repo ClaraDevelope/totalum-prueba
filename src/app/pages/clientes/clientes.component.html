@@ -1,16 +1,29 @@
 <mat-card>
   <div class="card-header">
     <mat-card-title>Lista de clientes</mat-card-title>
-    <button
-      class="btn-crear"
-      (click)="toggleFormulario()"
-      aria-label="Crear nuevo cliente"
-      title="Crear nuevo cliente"
-    >
-      + Crear cliente
-    </button>
+    <div class="acciones-header">
+      <button
+        class="btn-exportar"
+        (click)="exportarCSV()"
+        aria-label="Exportar listado de clientes"
+        title="Exportar listado de clientes"
+      >
+        <mat-icon>file_download</mat-icon>
+        Exportar CSV
+      </button>
+
+      <button
+        class="btn-crear"
+        (click)="toggleFormulario()"
+        aria-label="Crear nuevo cliente"
+        title="Crear nuevo cliente"
+      >
+        + Crear cliente
+      </button>
+    </div>
   </div>
 
+  <!-- MODAL NUEVO CLIENTE -->
   <div
     class="modal-backdrop"
     *ngIf="mostrarFormulario"
@@ -97,6 +110,7 @@
     </div>
   </div>
 
+  <!-- BUSCADOR -->
   <input
     type="text"
     placeholder="Buscar"
@@ -107,10 +121,12 @@
     class="buscador"
   />
 
+  <!-- SPINNER -->
   <div *ngIf="loading" class="spinner" role="status" aria-live="polite">
     Cargando...
   </div>
 
+  <!-- TABLA -->
   <table
     class="custom-table"
     *ngIf="!loading && items.length"
@@ -126,13 +142,55 @@
     </thead>
     <tbody>
       <tr *ngFor="let cliente of items">
-        <td data-label="Nombre">{{ cliente.nombre }}</td>
-        <td data-label="Fecha nacimiento">
-          {{ cliente.fecha_de_nacimiento | date : "dd/MM/yyyy" }}
+        <td data-label="Nombre">
+          <ng-container *ngIf="editando.has(cliente._id); else nombreTexto">
+            <input
+              type="text"
+              class="input-inline"
+              [(ngModel)]="copias[cliente._id].nombre"
+              required
+            />
+          </ng-container>
+          <ng-template #nombreTexto>{{ cliente.nombre }}</ng-template>
         </td>
-        <td data-label="Email">{{ cliente.email }}</td>
+
+        <td data-label="Fecha nacimiento">
+          <ng-container *ngIf="editando.has(cliente._id); else fechaTexto">
+            <input
+              type="date"
+              class="input-inline"
+              [(ngModel)]="copias[cliente._id].fecha_de_nacimiento"
+              required
+            />
+          </ng-container>
+          <ng-template #fechaTexto>
+            {{ cliente.fecha_de_nacimiento | date : "yyyy-MM-dd" }}
+          </ng-template>
+        </td>
+
+        <td data-label="Email">
+          <ng-container *ngIf="editando.has(cliente._id); else emailTexto">
+            <input
+              type="text"
+              class="input-inline"
+              [(ngModel)]="copias[cliente._id].email"
+              required
+            />
+          </ng-container>
+          <ng-template #emailTexto>{{ cliente.email }}</ng-template>
+        </td>
+
         <td data-label="Teléfono" class="nombre-con-icono">
-          {{ cliente.telefono }}
+          <ng-container *ngIf="editando.has(cliente._id); else telefonoTexto">
+            <input
+              type="number"
+              class="input-inline"
+              [(ngModel)]="copias[cliente._id].telefono"
+              required
+            />
+          </ng-container>
+          <ng-template #telefonoTexto>{{ cliente.telefono }}</ng-template>
+
           <button
             class="btn-icono"
             [attr.aria-label]="'Eliminar cliente ' + cliente.nombre"
@@ -141,6 +199,22 @@
           >
             <mat-icon>delete</mat-icon>
           </button>
+
+          <button
+            class="btn-icono"
+            [ngClass]="editando.has(cliente._id) ? 'btn-guardar' : 'btn-editar'"
+            [attr.aria-label]="
+              editando.has(cliente._id)
+                ? 'Guardar cambios de ' + cliente.nombre
+                : 'Editar cliente ' + cliente.nombre
+            "
+            [title]="editando.has(cliente._id) ? 'Guardar' : 'Editar'"
+            (click)="toggleEditar(cliente)"
+          >
+            <mat-icon>{{
+              editando.has(cliente._id) ? "save" : "edit"
+            }}</mat-icon>
+          </button>
         </td>
       </tr>
     </tbody>
@@ -148,6 +222,7 @@
 
   <p *ngIf="!loading && !items.length">No hay clientes para mostrar.</p>
 
+  <!-- PAGINACIÓN -->
   <div class="paginacion" *ngIf="!loading && items.length">
     <button
       (click)="anterior()"
